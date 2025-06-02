@@ -21,7 +21,7 @@
     "dev": "bun src/index.ts",
     "prepare": "bun run build",
     "watch": "tsc --watch",
-    "release": "tsc && npm version patch && npm publish --access public --tag latest"
+    "release": "bun run build && npm version patch && npm publish --access public --tag latest"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",

@@ -1,0 +1,11 @@
+.env
+dist/*
+node_modules/
+.vscode/
+build/*
+source-snap-*.txt
+package-lock.json
+bun.lock
+bun.lockb
+tsconfig.tsbuildinfo
+.npm

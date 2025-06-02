@@ -1,0 +1,22 @@
+scripts/
+tests/
+.bun/
+tsconfig.json
+.eslintrc.json
+.eslintignore
+.prettierrc
+.prettierignore
+tsconfig.tsbuildinfo
+node_modules/
+bun.lockb
+package-lock.json
+# Exclude any development files
+.env
+__tests__/
+coverage/
+*.log
+*.spec.ts
+*.test.ts
+.git
+.gitignore
+.vscode/

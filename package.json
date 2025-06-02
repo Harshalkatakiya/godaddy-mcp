@@ -1,0 +1,59 @@
+{
+  "name": "godaddy-mcp",
+  "description": "Model Context Protocol (MCP) server for GoDaddy",
+  "type": "module",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "bin": {
+    "godaddy-mcp": "./build/index.js"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "bun src/index.ts",
+    "prepare": "bun run build",
+    "watch": "tsc --watch",
+    "release": "tsc && npm version patch && npm publish --access public --tag latest"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "dotenv": "^16.5.0",
+    "zod": "^3.25.48"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.29",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "homepage": "https://www.npmjs.com/package/godaddy-mcp",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Harshalkatakiya/godaddy-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Harshalkatakiya/godaddy-mcp/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "build",
+    "README.md",
+    "LICENSE"
+  ],
+  "directories": {
+    "build": "build"
+  },
+  "author": {
+    "name": "Harshal Katakiya",
+    "email": "katakiyaharshl001@gmail.com",
+    "url": "https://github.com/Harshalkatakiya"
+  },
+  "keywords": [
+    "godaddy",
+    "mcp",
+    "model-context-protocol",
+    "server"
+  ]
+}

@@ -7,7 +7,14 @@
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "bin": {
-    "godaddy-mcp": "./build/index.js"
+    "mcp-server-godaddy": "./build/index.js"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    }
   },
   "scripts": {
     "build": "tsc --build",

@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import type { DomainAvailability } from "../index";
+import type { CheckDomainAvailabilityError } from "../index.js";
 
 dotenv.config();
 
@@ -8,13 +8,15 @@ export async function checkADomain<T>(
     method: 'GET' | 'POST',
     checkType: 'FAST' | 'FULL',
     forTransfer: boolean
-): Promise<T | null> {
+): Promise<T | CheckDomainAvailabilityError> {
     try {
         const apiKey = process.env.GODADDY_API_KEY;
         const secretKey = process.env.GODADDY_API_SECRET;
         if (!apiKey || !secretKey) {
-            console.error('[checkADomain] GoDaddy API credentials are not set in env variables.');
-            return null;
+            return {
+                "code": "UNABLE_TO_AUTHENTICATE",
+                "message": "GoDaddy API credentials are not set in env variables."
+            };
         }
         const params = new URLSearchParams({
             domain,
@@ -29,14 +31,16 @@ export async function checkADomain<T>(
                 'Authorization': `sso-key ${apiKey}:${secretKey}`
             }
         });
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`[checkADomain] Error ${response.status}: ${errorText}`);
-            return null;
+        if (response.status === 200) {
+            return (await response.json()) as T;
+        } else {
+            return (await response.json()) as CheckDomainAvailabilityError;
         }
-        return (await response.json()) as T;
+
     } catch (error) {
-        console.error('[checkADomain] Error making request:', error);
-        return null;
+        return {
+            "code": "UNABLE_TO_CONNECT",
+            "message": (error as Error).message
+        };
     }
 }

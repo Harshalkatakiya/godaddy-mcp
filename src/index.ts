@@ -12,6 +12,20 @@ export interface DomainAvailability {
   price?: number;
 }
 
+export interface DomainAvailabilityErrorFields {
+  code: string;
+  message: string;
+  path: string;
+  pathRelated: string;
+}
+
+export interface CheckDomainAvailabilityError {
+  code: string;
+  fields?: DomainAvailabilityErrorFields[];
+  message: string;
+  retryAfterSec?: number;
+}
+
 const server = new McpServer({
   name: "godaddy-mcp",
   version: "1.0.0",
@@ -26,42 +40,21 @@ server.tool(
   "Check whether a domain is available for purchase or not",
   {
     domain: z.string().min(2).describe("Domain to check (e.g. example.com)"),
+    checkType: z.enum(["FAST", "FULL"]).default("FAST").describe("Type of check to perform (FAST for Optimize for time or FULL for full accuracy)"),
+    forTransfer: z.boolean().default(false).describe("Whether or not to include domains available for transfer. If set to True, checkType is ignored"),
   },
-  async ({ domain }) => {
+  async ({ domain, checkType, forTransfer }) => {
     const response = await checkADomain<DomainAvailability>(
       domain,
       "GET",
-      "FAST",
-      false
+      checkType, forTransfer
     );
-    if (!response) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `Could not fetch domain availability. Please try again.`,
-          },
-        ],
-      };
-    }
     return {
       content: [
         {
           type: "text",
-          text: `Domain: ${response.domain}`,
-        } as const,
-        {
-          type: "text",
-          text: `Available: ${response.available ? "✅ Yes" : "❌ No"}`,
-        } as const,
-        ...(response.available
-          ? [
-            {
-              type: "text",
-              text: `Price: ${response.price ? response.price / 1000000 : "N/A"} ${response.currency ?? ""}`,
-            } as const,
-          ]
-          : []),
+          text: JSON.stringify(response, null, 2),
+        },
       ],
     };
   }

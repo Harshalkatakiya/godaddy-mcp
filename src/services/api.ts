@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export interface DomainAvailability {
+interface DomainAvailabilitySuccessFields {
     available: boolean;
     currency?: string;
     definitive: boolean;
@@ -11,27 +11,28 @@ export interface DomainAvailability {
     price?: number;
 }
 
-export interface DomainAvailabilityErrorFields {
+interface DomainAvailabilityErrorFields {
     code: string;
     message: string;
     path: string;
     pathRelated: string;
 }
 
-export interface CheckDomainAvailabilityError {
+interface CheckDomainAvailabilityError {
     code: string;
     fields?: DomainAvailabilityErrorFields[];
     message: string;
     retryAfterSec?: number;
 }
 
-export async function checkADomain<T>(
+export async function checkADomain(
     domain: string,
     method: 'GET' | 'POST',
     checkType: 'FAST' | 'FULL',
     forTransfer: boolean
-): Promise<T | CheckDomainAvailabilityError> {
+): Promise<DomainAvailabilitySuccessFields | CheckDomainAvailabilityError> {
     try {
+        const apiURL = process.env.GODADDY_API_BASE_URL || "https://api.godaddy.com" as "https://api.ote-godaddy.com" | "https://api.godaddy.com";
         const apiKey = process.env.GODADDY_API_KEY;
         const secretKey = process.env.GODADDY_API_SECRET;
         if (!apiKey || !secretKey) {
@@ -45,7 +46,7 @@ export async function checkADomain<T>(
             checkType,
             forTransfer: String(forTransfer),
         });
-        const url = `https://api.ote-godaddy.com/v1/domains/available?${params.toString()}`;
+        const url = `${apiURL}/v1/domains/available?${params.toString()}`;
         const response = await fetch(url, {
             method,
             headers: {
@@ -54,7 +55,7 @@ export async function checkADomain<T>(
             }
         });
         if (response.status === 200) {
-            return (await response.json()) as T;
+            return (await response.json()) as DomainAvailabilitySuccessFields;
         } else {
             return (await response.json()) as CheckDomainAvailabilityError;
         }

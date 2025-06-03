@@ -7,7 +7,7 @@
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "bin": {
-    "mcp-server-godaddy": "./build/index.js"
+    "godaddy-mcp": "./build/index.js"
   },
   "exports": {
     "./package.json": "./package.json",

@@ -2,7 +2,7 @@
   "name": "godaddy-mcp",
   "description": "Model Context Protocol (MCP) server for GoDaddy",
   "type": "module",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "license": "MIT",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",

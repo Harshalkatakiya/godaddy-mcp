@@ -1,7 +1,29 @@
 import dotenv from "dotenv";
-import type { CheckDomainAvailabilityError } from "../index.js";
 
 dotenv.config();
+
+export interface DomainAvailability {
+    available: boolean;
+    currency?: string;
+    definitive: boolean;
+    domain: string;
+    period?: number;
+    price?: number;
+}
+
+export interface DomainAvailabilityErrorFields {
+    code: string;
+    message: string;
+    path: string;
+    pathRelated: string;
+}
+
+export interface CheckDomainAvailabilityError {
+    code: string;
+    fields?: DomainAvailabilityErrorFields[];
+    message: string;
+    retryAfterSec?: number;
+}
 
 export async function checkADomain<T>(
     domain: string,

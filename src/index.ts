@@ -13,6 +13,7 @@ const server = new McpServer({
 
 server.tool(
   "check-domain-availability",
+  "Check the availability of a domain",
   {
     domain: z.string().min(2).describe("Domain to check (e.g. example.com)"),
     checkType: z.enum(["FAST", "FULL"]).default("FAST").describe("Type of check to perform (FAST for time optimization or FULL for full accuracy)"),
@@ -20,12 +21,10 @@ server.tool(
   },
   {
     title: "Check Domain Availability",
-    readOnlyHint: true,
     openWorldHint: true,
   },
-  async (args) => {
+  async ({ domain, checkType, forTransfer }) => {
     try {
-      const { domain, checkType, forTransfer } = args;
       const response = await checkADomain(domain, "GET", checkType, forTransfer);
       return {
         content: [
